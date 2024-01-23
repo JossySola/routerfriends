@@ -1,5 +1,10 @@
-import { Link, Outlet, useLoaderData } from "react-router-dom";
-import { getContacts } from "../contacts";
+import { Link, Outlet, NavLink, useLoaderData, Form, redirect, useNavigation } from "react-router-dom";
+import { getContacts, createContact } from "../contacts";
+
+export async function action() {
+  const contact = await createContact();
+  return redirect(`/contacts/${contact.id}/edit`);
+}
 
 export async function loader() {
   const contacts = await getContacts();
@@ -31,16 +36,25 @@ export default function Root() {
                 aria-live="polite"
               ></div>
             </form>
-            <form method="post">
+            <Form method="post">
               <button type="submit">New</button>
-            </form>
+            </Form>
           </div>
           <nav>
             {contacts.length ? (
               <ul>
                 {contacts.map((contact) => (
                   <li key={contact.id}>
-                    <Link to={`contacts/${contact.id}`}>
+                    <NavLink
+                      to={`contacts/${contact.id}`}
+                      className={({ isActive, isPending }) =>
+                        isActive
+                          ? "active"
+                          : isPending
+                          ? "pending"
+                          : ""
+                      }
+                    >
                       {contact.first || contact.last ? (
                         <>
                           {contact.first} {contact.last}
@@ -49,7 +63,7 @@ export default function Root() {
                         <i>No Name</i>
                       )}{" "}
                       {contact.favorite && <span>★</span>}
-                    </Link>
+                    </NavLink>
                   </li>
                 ))}
               </ul>
@@ -60,7 +74,12 @@ export default function Root() {
             )}
           </nav>
         </div>
-        <div id="detail">
+        <div
+          id="detail"
+          className={
+            navigation.state === "loading" ? "loading" : ""
+          }
+        >
           <Outlet />
         </div>
       </>
