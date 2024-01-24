@@ -22,7 +22,7 @@ import Index from "./routes/index"
 
 const router = createBrowserRouter([
   {
-    path: "/routerfriends/",
+    path: "routerfriends/",
     element: <Root />,
     errorElement: <ErrorPage />,
     loader: rootLoader,
@@ -49,8 +49,8 @@ const router = createBrowserRouter([
             action: destroyAction,
             errorElement: <div>Oops! There was an error.</div>,
           },
-        ]
-      }
+        ],
+      },
     ],
   },
 ])

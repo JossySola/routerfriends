@@ -4,7 +4,7 @@ import { getContacts, createContact } from "../contacts";
 
 export async function action() {
   const contact = await createContact();
-  return redirect(`/contacts/${contact.id}/edit`);
+  return redirect(`/routerfriends/contacts/${contact.id}/edit`);
 }
 
 export async function loader({ request }) {
@@ -17,13 +17,14 @@ export async function loader({ request }) {
 export default function Root() {
   const { contacts, q } = useLoaderData();
   const navigation = useNavigation();
-  const submit = useSubmit();
-
-  const searching = navigation.location && new URLSearchParams(navigation.location.search).has("q");
 
   useEffect(() => {
     document.getElementById("q").value = q;
   }, [q]);
+
+  const submit = useSubmit();
+
+  const searching = navigation.location && new URLSearchParams(navigation.location.search).has("q");
 
     return (
       <>
